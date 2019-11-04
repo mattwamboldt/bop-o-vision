@@ -5,7 +5,7 @@ visualizationSelector.addEventListener('change', function() {
 });
 
 var context = new window.AudioContext();
-var audioElement = document.querySelector('#source');
+var audioElement = document.querySelector('#audio');
 var analyser = context.createAnalyser();
 analyser.smoothingTimeConstant = 0;
 var bufferLength = analyser.frequencyBinCount;
@@ -118,5 +118,22 @@ function draw() {
         drawCircle();
     }
 }
+
+const trackLinks = document.querySelectorAll("#tracklist a");
+
+trackLinks.forEach(link => {
+    link.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        var activeElement = document.querySelector("a.active");
+        activeElement.classList.remove('active');
+        e.target.classList.add('active');
+
+        var audioSourceElement = document.querySelector('#audioSource');
+        audioSourceElement.src = e.target.getAttribute('data-value');
+        audioElement.load();
+        audioElement.play();
+    });
+});
 
 draw();
