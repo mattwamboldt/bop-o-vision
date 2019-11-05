@@ -3,25 +3,7 @@
         <link rel="stylesheet" type="text/css" href="main.css" />
     </head>
     <body>
-        <ul id="tracklist">
-            <li><a href="#" data-value="audio/carefree.mp3">Carefree</a></li>
-            <li><a class="active" href="#" data-value="audio/celebration.mp3">Celebration</a></li>
-        </ul>
-        <div id="player">
-            <canvas id="visualizer" width="500px" height="500px"></canvas>
-            <audio id="audio" controls>
-                <source id="audioSource" src="audio/celebration.mp3" type="audio/mp3">
-                Your browser does not support the audio tag.
-            </audio>
-        </div>
-        <div id="visSelector">
-            <label for="visualization">Visualization</label>
-            <select id="visualization">
-                <option value="time">Time</option>
-                <option value="frequency">Frequency</option>
-                <option value="circle">Circle</option>
-            </select>
-        </div>
+        <div id="app"></div>
         <script src="bundle.js"></script>
     </body>
 </html>

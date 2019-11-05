@@ -4,13 +4,18 @@ const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = {
     entry: [
-        './src/index.js',
+        './src/index.tsx',
         './src/style.scss'
     ],
+    resolve: {
+        modules: [path.resolve(__dirname, 'src'), "node_modules"],
+        extensions: [".ts", ".tsx", '.js', '.jsx']
+    },
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
     },
+    devtool: "source-map",
     devServer: {
         contentBase: './dist',
     },
@@ -23,6 +28,20 @@ module.exports = {
     ],
     module: {
         rules: [
+            {
+                test: /\.ts(x?)$/,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: "ts-loader"
+                    }
+                ]
+            },
+            {
+                enforce: "pre",
+                test: /\.js$/,
+                loader: "source-map-loader"
+            },
             {
                 test: /\.s[ac]ss$/,
                 use: [
@@ -37,5 +56,5 @@ module.exports = {
                 ],
             },
         ],
-    },
+    }
 };

@@ -1,17 +1,32 @@
-var visualizationSelector = document.getElementById('visualization');
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+
+import App from './components/app';
+
+const playTrack = (path: string) => {
+    var audioSourceElement = document.querySelector('#audioSource') as HTMLSourceElement;
+    audioSourceElement.src = path;
+    var audioElement: HTMLAudioElement = document.querySelector('#audio');
+    audioElement.load();
+    audioElement.play();
+}
+
+ReactDOM.render(<App onTrackChange={playTrack} />, document.getElementById("app"));
+
+var visualizationSelector = (document.getElementById('visualization')) as HTMLSelectElement;
 var visualization = visualizationSelector.value;
 visualizationSelector.addEventListener('change', function() {
     visualization = visualizationSelector.value;
 });
 
 var context = new window.AudioContext();
-var audioElement = document.querySelector('#audio');
 var analyser = context.createAnalyser();
 analyser.smoothingTimeConstant = 0;
 var bufferLength = analyser.frequencyBinCount;
 var dataArray = new Uint8Array(bufferLength);
 analyser.getByteTimeDomainData(dataArray);
 
+var audioElement: HTMLAudioElement = document.querySelector('#audio');
 var source = context.createMediaElementSource(audioElement);
 source.connect(analyser).connect(context.destination);
 
@@ -21,7 +36,7 @@ audioElement.addEventListener("play", function() {
     }
 });
 
-var visualizer = document.getElementById('visualizer');
+var visualizer = document.getElementById('visualizer') as HTMLCanvasElement;
 var visualizerCtx = visualizer.getContext("2d");
 
 // INitial 2 visualizations
@@ -118,22 +133,5 @@ function draw() {
         drawCircle();
     }
 }
-
-const trackLinks = document.querySelectorAll("#tracklist a");
-
-trackLinks.forEach(link => {
-    link.addEventListener("click", function (e) {
-        e.preventDefault();
-
-        var activeElement = document.querySelector("a.active");
-        activeElement.classList.remove('active');
-        e.target.classList.add('active');
-
-        var audioSourceElement = document.querySelector('#audioSource');
-        audioSourceElement.src = e.target.getAttribute('data-value');
-        audioElement.load();
-        audioElement.play();
-    });
-});
 
 draw();
