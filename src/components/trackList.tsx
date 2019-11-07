@@ -19,22 +19,25 @@ const TrackList = (props: IProps) => {
     const [currentTrack, setCurrentTrack] = React.useState(1);
 
     return (
-        <ul id="tracklist">
-            {tracks.map((v, index) => {
-                const className = index === currentTrack ? 'active' : '';
+        <div id="tracklist">
+            <h2>Tracks</h2>
+            <ul>
+                {tracks.map((v, index) => {
+                    const className = index === currentTrack ? 'active' : '';
 
-                return (
-                    <li key={index}>
-                        <a className={className}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                setCurrentTrack(index);
-                                props.onTrackChange(v.path);
-                            }}>{v.name}</a>
-                    </li>
-                );
-            })}
-        </ul>
+                    return (
+                        <li key={index}>
+                            <a className={className}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setCurrentTrack(index);
+                                    props.onTrackChange(v.path);
+                                }}>{index + 1} - {v.name}</a>
+                        </li>
+                    );
+                })}
+            </ul>
+        </div>
     );
 };
 

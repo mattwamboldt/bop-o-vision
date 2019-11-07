@@ -11,17 +11,18 @@ const playTrack = (path: string) => {
     audioElement.play();
 }
 
-ReactDOM.render(<App onTrackChange={playTrack} />, document.getElementById("app"));
+var visualization = 'time';
+const setVisualization = (id: string) => {
+    visualization = id;
+}
 
-var visualizationSelector = (document.getElementById('visualization')) as HTMLSelectElement;
-var visualization = visualizationSelector.value;
-visualizationSelector.addEventListener('change', function() {
-    visualization = visualizationSelector.value;
-});
+ReactDOM.render(
+    <App onTrackChange={playTrack} onVisualizationChange={setVisualization} />,
+    document.getElementById("app")
+);
 
 var context = new window.AudioContext();
 var analyser = context.createAnalyser();
-analyser.smoothingTimeConstant = 0;
 var bufferLength = analyser.frequencyBinCount;
 var dataArray = new Uint8Array(bufferLength);
 analyser.getByteTimeDomainData(dataArray);
@@ -70,17 +71,25 @@ function drawTime() {
 function drawFrequency() {
     analyser.getByteFrequencyData(dataArray);
 
-    var barWidth = (500 / bufferLength) * 2.5;
-    var barHeight;
+    var barWidth = 1;
+    var numBars = visualizer.width / barWidth;
+
+    var binsPerBar = Math.floor(bufferLength / numBars);
+    var barHeight = 0;
     var x = 0;
+    var numBins = 0;
 
     for (var i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i];
-
-        visualizerCtx.fillStyle = 'rgb(' + (barHeight + 100) + ',50,50)';
-        visualizerCtx.fillRect(x, 500 - barHeight, barWidth, barHeight);
-
-        x += barWidth + 1;
+        barHeight += dataArray[i];
+        numBins += 1;
+        if (numBins >= binsPerBar) {
+            barHeight /= numBins;
+            visualizerCtx.fillStyle = 'rgb(' + (barHeight + 100) + ',50,50)';
+            visualizerCtx.fillRect(x, visualizer.height - barHeight, barWidth, visualizer.height);
+            x += barWidth + 1;
+            numBins = 0;
+            barHeight = 0;
+        }
     }
 }
 

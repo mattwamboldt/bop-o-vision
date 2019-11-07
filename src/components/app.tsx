@@ -6,6 +6,7 @@ import VisionList from './visionList';
 
 interface IProps {
     onTrackChange: (path: string) => void;
+    onVisualizationChange: (id: string) => void;
 }
 
 const App = (props: IProps) => {
@@ -13,7 +14,7 @@ const App = (props: IProps) => {
         <React.Fragment>
             <TrackList onTrackChange={props.onTrackChange} />
             <Player />
-            <VisionList />
+            <VisionList onVisualizationChange={props.onVisualizationChange}/>
         </React.Fragment>
     );
 };
