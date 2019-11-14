@@ -72,10 +72,15 @@ h2 {
     }
 
     #timecode, label {
-        margin: 0.5em 0.5em;
+        margin: 0.5em;
     }
 
     #playButton {
-        width: 60px;
+        margin: 0.5em;
+        margin-right: 0;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        outline: none;
     }
 }

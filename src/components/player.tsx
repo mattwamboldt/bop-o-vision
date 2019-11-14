@@ -22,6 +22,11 @@ class Player extends React.Component<{}, IState> {
     }
 
     public render() {
+        let playButtonClass = "fa fa-play";
+        if (this.state.isPlaying) {
+            playButtonClass = "fa fa-pause";
+        }
+
         return (
             <div id="player">
                 <canvas id="visualizer" width="300px" height="300px"></canvas>
@@ -33,7 +38,7 @@ class Player extends React.Component<{}, IState> {
                             this.audioPlayerRef.play();
                         }
                     }}>
-                        {this.state.isPlaying ? 'Pause' : 'Play'}
+                        <i className={playButtonClass}></i>
                     </button>
                     <div id="timecode">
                         {this.formatTimecode(this.state.currentSeconds)} / {this.formatTimecode(this.state.totalSeconds)}
@@ -44,7 +49,7 @@ class Player extends React.Component<{}, IState> {
                         onChange={(e) => {
                             this.audioPlayerRef.currentTime = Number(e.target.value);
                         }}/>
-                    <label>Volume</label>
+                    <label><i className='fa fa-volume-up'></i></label>
                     <input id="volume" type='range' min="0" max="100" value={this.state.volume * 100} onChange={(e) => {
                         this.audioPlayerRef.volume = Number(e.target.value) / 100;
                     }}/>
