@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import Display from './display';
 import Controls from './controls';
 
 interface IState {
@@ -10,13 +11,10 @@ interface IState {
 };
 
 class Player extends React.Component<{}, IState> {
-    private audioPlayerRef: HTMLAudioElement;
-    private canvasRef: HTMLCanvasElement;
-    private resizeTimeout: number;
+    private audioPlayerRef: HTMLAudioElement = null;
 
     constructor (props: {}) {
         super(props);
-        this.audioPlayerRef = null;
         this.state = {
             currentSeconds: 0,
             totalSeconds: 0,
@@ -25,21 +23,10 @@ class Player extends React.Component<{}, IState> {
         };
     }
 
-    public componentDidMount() {
-        window.addEventListener('resize', this.resizeHandler);
-        this.resize();
-    }
-
-    public componentWillUnmount() {
-        window.removeEventListener('resize', this.resizeHandler);
-    }
-
     public render() {
         return (
             <div id="player">
-                <div id='display'>
-                    <canvas ref={(r) => { this.canvasRef = r; }} id="visualizer"></canvas>
-                </div>
+                <Display />
                 <Controls currentSeconds={this.state.currentSeconds}
                     totalSeconds={this.state.totalSeconds}
                     onSecondsChanged={this.onSecondsChanged}
@@ -68,20 +55,6 @@ class Player extends React.Component<{}, IState> {
                 </audio>
             </div>
         );
-    }
-
-    private resizeHandler = () => {
-        if (this.resizeTimeout) {
-            window.clearTimeout(this.resizeTimeout);
-        }
-
-        this.resizeTimeout = window.setTimeout(this.resize, 50);
-    }
-
-    private resize = () => {
-        this.canvasRef.width = this.canvasRef.parentElement.clientWidth;
-        this.canvasRef.height = this.canvasRef.parentElement.clientHeight;
-        this.resizeTimeout = 0;
     }
 
     private onPlayPressed = (isPlaying: boolean) => {
