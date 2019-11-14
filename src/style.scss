@@ -22,8 +22,15 @@ body {
     display: flex;
     flex-direction: column;
 
-    canvas {
+    #display {
         flex-grow: 1;
+        position: relative;
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
     }
 }
 
