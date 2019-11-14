@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import Controls from './controls';
+
 interface IState {
     currentSeconds: number;
     totalSeconds: number;
@@ -33,41 +35,18 @@ class Player extends React.Component<{}, IState> {
     }
 
     public render() {
-        let playButtonClass = "fa fa-play";
-        if (this.state.isPlaying) {
-            playButtonClass = "fa fa-pause";
-        }
-
         return (
             <div id="player">
                 <div id='display'>
-                    <canvas ref={(r) => { this.canvasRef = r; }}
-                        id="visualizer" width="x300p" height="300px"></canvas>
+                    <canvas ref={(r) => { this.canvasRef = r; }} id="visualizer"></canvas>
                 </div>
-                <div id="controls">
-                    <button id="playButton" onClick={() => {
-                        if (this.state.isPlaying) {
-                            this.audioPlayerRef.pause();
-                        } else {
-                            this.audioPlayerRef.play();
-                        }
-                    }}>
-                        <i className={playButtonClass}></i>
-                    </button>
-                    <div id="timecode">
-                        {this.formatTimecode(this.state.currentSeconds)} / {this.formatTimecode(this.state.totalSeconds)}
-                    </div>
-                    <input id="scrubber" type='range'
-                        min="0" max={this.state.totalSeconds}
-                        value={this.state.currentSeconds}
-                        onChange={(e) => {
-                            this.audioPlayerRef.currentTime = Number(e.target.value);
-                        }}/>
-                    <label><i className='fa fa-volume-up'></i></label>
-                    <input id="volume" type='range' min="0" max="100" value={this.state.volume * 100} onChange={(e) => {
-                        this.audioPlayerRef.volume = Number(e.target.value) / 100;
-                    }}/>
-                </div>
+                <Controls currentSeconds={this.state.currentSeconds}
+                    totalSeconds={this.state.totalSeconds}
+                    onSecondsChanged={this.onSecondsChanged}
+                    isPlaying={this.state.isPlaying}
+                    onPlayPressed={this.onPlayPressed}
+                    volume={this.state.volume}
+                    onVolumeChanged={this.onVolumeChanged} />
                 <audio id="audio" ref={(r) => { this.audioPlayerRef = r; }}
                     onTimeUpdate={(e) => {
                         this.setState({currentSeconds: e.currentTarget.currentTime});
@@ -105,10 +84,20 @@ class Player extends React.Component<{}, IState> {
         this.resizeTimeout = 0;
     }
 
-    private formatTimecode (seconds: number) {
-        const minutes = Math.floor(seconds / 60);
-        const secondsRemainder = Math.floor(seconds % 60);
-        return minutes + ':' + String(secondsRemainder).padStart(2, '0');
+    private onPlayPressed = (isPlaying: boolean) => {
+        if (isPlaying) {
+            this.audioPlayerRef.pause();
+        } else {
+            this.audioPlayerRef.play();
+        }
+    }
+
+    private onSecondsChanged = (seconds: number) => {
+        this.audioPlayerRef.currentTime = seconds;
+    }
+
+    private onVolumeChanged = (volume: number) => {
+        this.audioPlayerRef.volume = volume / 100;
     }
 };
 
