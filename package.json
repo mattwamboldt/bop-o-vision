@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --open",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "predeploy" : "npm run build",
+    "deploy" : "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -18,12 +20,13 @@
   "bugs": {
     "url": "https://github.com/mattwamboldt/bop-o-vision/issues"
   },
-  "homepage": "https://github.com/mattwamboldt/bop-o-vision#readme",
+  "homepage": "https://mattwamboldt/bop-o-vision",
   "devDependencies": {
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.9.3",
     "css-loader": "^3.2.0",
     "fibers": "^4.0.2",
+    "gh-pages": "^5.0.0",
     "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.13.0",
     "sass": "^1.23.3",
